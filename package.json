@@ -1,0 +1,63 @@
+{
+  "name": "got-proxy",
+  "version": "1.0.0-0",
+  "description": "Proxy agent for got",
+  "keywords": [
+    "http_proxy",
+    "https_proxy",
+    "no_proxy",
+    "no-proxy",
+    "got"
+  ],
+  "homepage": "https://github.com/commenthol/got-proxy#readme",
+  "bugs": {
+    "url": "https://github.com/commenthol/got-proxy/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/commenthol/got-proxy.git"
+  },
+  "license": "MIT",
+  "author": "commenthol <commenthol@gmail.com>",
+  "type": "module",
+  "main": "src/index.js",
+  "module": "src/index.js",
+  "types": "./types/index.d.ts",
+  "files": [
+    "src",
+    "types"
+  ],
+  "scripts": {
+    "ci": "npm-run-all pretty lint test:all types",
+    "lint": "eslint",
+    "pretty": "prettier -w **/*.js",
+    "test": "mocha",
+    "test:httpproxy": "PORT=40404 http_proxy=http://localhost:40404 mocha",
+    "test:noproxy": "PORT=40404 http_proxy=http://localhost:40404 no_proxy=httpbin.org mocha",
+    "test:all": "c8 npm-run-all test test:httpproxy test:noproxy",
+    "types": "rm -r types; tsc"
+  },
+  "mocha": {
+    "timeout": 5000
+  },
+  "dependencies": {
+    "got": "^14.4.1",
+    "hpagent": "^1.2.0",
+    "uses-proxy": "^1.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.7.0",
+    "@types/got": "^9.6.12",
+    "@types/node": "^20.14.10",
+    "c8": "^10.1.2",
+    "eslint": "^9.7.0",
+    "globals": "^15.8.0",
+    "mocha": "^10.6.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^3.3.3",
+    "typescript": "^5.5.3"
+  },
+  "engines": {
+    "node": ">= 20"
+  }
+}
