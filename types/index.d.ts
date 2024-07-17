@@ -1,7 +1,8 @@
-export function gotProxy(options?: GotProxyOptions | undefined): _got.GotFn;
+export function gotProxy(options?: GotProxyOptions | undefined): GotRequestFunction;
 export type ProxyAgentOptions = import("hpagent").HttpProxyAgentOptions | import("hpagent").HttpsProxyAgentOptions;
 export type NoProxy = {
     noProxy: string;
 };
 export type GotProxyOptions = ProxyAgentOptions & NoProxy;
-import _got from 'got';
+export type OptionsInit = import("got").OptionsInit;
+export type GotRequestFunction = import("got").GotRequestFunction;

@@ -6,10 +6,12 @@
     "declaration": true,
     "declarationDir": "types",
     "emitDeclarationOnly": true,
-    "moduleResolution": "node",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "noEmitOnError": true,
     "noImplicitAny": false,
     "strict": true,
+    "skipLibCheck": true,
     "target": "ESNext",
   },
   "include": [

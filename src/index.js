@@ -6,28 +6,36 @@
 
 import { usesProxy, shouldProxy } from 'uses-proxy'
 import { HttpProxyAgent, HttpsProxyAgent } from 'hpagent'
-import _got from 'got'
+import { got as _got } from 'got'
 
 /**
  * @typedef {import('hpagent').HttpProxyAgentOptions | import('hpagent').HttpsProxyAgentOptions} ProxyAgentOptions
  * @typedef {{noProxy: string}} NoProxy
  * @typedef {ProxyAgentOptions & NoProxy} GotProxyOptions
  */
+/**
+ * @typedef {import('got').OptionsInit} OptionsInit
+ * @typedef {import('got').GotRequestFunction} GotRequestFunction
+ */
 
 /**
  * @param {GotProxyOptions} [options]
- * @returns {_got.GotFn}
+ * @returns {GotRequestFunction}
  */
 export const gotProxy = (options) => {
-  const { noProxy: noProxy0, proxy: proxyUri0, ...others } = options || {}
+  const {
+    noProxy: noProxyParam,
+    proxy: proxyUriParam,
+    ...others
+  } = options || {}
   const {
     proxyUri, // proxy uri from https_proxy, http_proxy, ...
-    noProxy: noProxy1 // no_proxy env var content
+    noProxy: noProxyEnv // no_proxy env var content
   } = usesProxy()
 
   // allow overwrites from options
-  const noProxy = noProxy0 || noProxy1
-  const proxy = proxyUri0 || proxyUri
+  const noProxy = noProxyParam || noProxyEnv
+  const proxy = proxyUriParam || proxyUri
 
   let agentHttp
   let agentHttps
@@ -38,21 +46,18 @@ export const gotProxy = (options) => {
   const matcher = shouldProxy({ proxyUri: proxy?.toString(), noProxy })
 
   /**
-   * @param {_got.GotUrl} url
-   * @param {_got.GotJSONOptions|_got.GotFormOptions<string>|
-   *  _got.GotFormOptions<null>|_got.GotBodyOptions<string>|
-   *  _got.GotBodyOptions<null>} [options]
-   * @returns {_got.GotPromise<any>}
+   * @param {string|URL} url
+   * @param {OptionsInit} [options]
    */
   const got = (url, options) => {
     const _options = { ...options }
     let { hostname } = parseUrl(url)
     if (matcher(hostname)) {
-      // @ts-expect-error
       _options.agent = { https: agentHttps, http: agentHttp }
     }
     return _got(url, _options)
   }
+  // @ts-expect-error
   return got
 }
 
