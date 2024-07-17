@@ -1,6 +1,6 @@
 {
   "name": "got-proxy",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Proxy agent for got",
   "keywords": [
     "http_proxy",
